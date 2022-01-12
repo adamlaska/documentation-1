@@ -298,10 +298,10 @@
     prop-types "^15.7.2"
     react-codemirror2 "^7.2.1"
 
-"@readme/variable@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.yarnpkg.com/@readme/variable/-/variable-13.0.0.tgz#3e1b3b1f87ada3ee00e84601f28a848d510a4edf"
-  integrity sha512-Dc6ydFc/IcPUDDGiH/3JTwGI+i/duToUrCSDvQdcP6m7UpIUbpnWqw+Hh4m1GpDeDFBV64fuAM7xuK1j7jbZwg==
+"@readme/variable@^13.6.3":
+  version "13.6.4"
+  resolved "https://registry.yarnpkg.com/@readme/variable/-/variable-13.6.4.tgz#c5e55475b89d7e3ea996e12c61d39c1abf5a4af6"
+  integrity sha512-O0Ogtxcaz+fugEktKjPTKWpv0QwaGOEFARxnnYX4HbCAhoPxO7/TgKRnn5BZdEZ6CD4u89fqHmbP9e2EL51xzw==
   dependencies:
     classnames "^2.2.6"
     prop-types "^15.7.2"
