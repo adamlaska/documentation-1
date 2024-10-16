@@ -1,0 +1,109 @@
+---
+section: chainlinkFunctions
+date: Last Modified
+title: "FunctionsClient API Reference"
+---
+
+import { Aside, CopyText } from "@components"
+
+<Aside type="note" title="Add Chainlink to your project">
+   If you need to integrate Chainlink into your project, install the [@chainlink/contracts NPM package](https://www.npmjs.com/package/@chainlink/contracts).
+
+- If you use [NPM](https://www.npmjs.com/): <CopyText text="npm install @chainlink/contracts --save" code/>
+
+- If you use [Yarn](https://yarnpkg.com/): <CopyText text="yarn add @chainlink/contracts" code/>
+
+Functions contracts are available starting from version _0.7.1_.
+
+</Aside>
+
+Consumer contract developers inherit [FunctionsClient](https://github.com/smartcontractkit/chainlink/blob/develop/contracts/src/v0.8/functions/v1_0_0/FunctionsClient.sol) to create Chainlink Functions requests.
+
+## Events
+
+### RequestSent
+
+```solidity
+event RequestSent(bytes32 id)
+```
+
+### RequestFulfilled
+
+```solidity
+event RequestFulfilled(bytes32 id)
+```
+
+## Errors
+
+### OnlyRouterCanFulfill
+
+```solidity
+error OnlyRouterCanFulfill()
+```
+
+## Methods
+
+### constructor
+
+```solidity
+constructor(address router)
+```
+
+### \_sendRequest
+
+```solidity
+function _sendRequest(bytes data, uint64 subscriptionId, uint32 callbackGasLimit, bytes32 donId) internal returns (bytes32)
+```
+
+Sends a Chainlink Functions request to the stored router address
+
+#### Parameters
+
+| Name             | Type    | Description                                                           |
+| ---------------- | ------- | --------------------------------------------------------------------- |
+| data             | bytes   | The CBOR encoded bytes data for a Functions request                   |
+| subscriptionId   | uint64  | The subscription ID that will be charged to service the request       |
+| callbackGasLimit | uint32  | the amount of gas that will be available for the fulfillment callback |
+| donId            | bytes32 |                                                                       |
+
+#### Return Values
+
+| Name | Type    | Description                                         |
+| ---- | ------- | --------------------------------------------------- |
+| [0]  | bytes32 | requestId The generated request ID for this request |
+
+### fulfillRequest
+
+```solidity
+function fulfillRequest(bytes32 requestId, bytes response, bytes err) internal virtual
+```
+
+User defined function to handle a response from the DON
+
+_Either response or error parameter will be set, but never both_
+
+#### Parameters
+
+| Name      | Type    | Description                                                                         |
+| --------- | ------- | ----------------------------------------------------------------------------------- |
+| requestId | bytes32 | The request ID, returned by sendRequest()                                           |
+| response  | bytes   | Aggregated response from the execution of the user's source code                    |
+| err       | bytes   | Aggregated error from the execution of the user code or from the execution pipeline |
+
+### handleOracleFulfillment
+
+```solidity
+function handleOracleFulfillment(bytes32 requestId, bytes response, bytes err) external
+```
+
+Chainlink Functions response handler called by the Functions Router during fullilment from the designated transmitter node in an OCR round
+
+_Either response or error parameter will be set, but never both_
+
+#### Parameters
+
+| Name      | Type    | Description                                                                            |
+| --------- | ------- | -------------------------------------------------------------------------------------- |
+| requestId | bytes32 | The requestId returned by FunctionsClient.sendRequest().                               |
+| response  | bytes   | Aggregated response from the request's source code.                                    |
+| err       | bytes   | Aggregated error either from the request's source code or from the execution pipeline. |

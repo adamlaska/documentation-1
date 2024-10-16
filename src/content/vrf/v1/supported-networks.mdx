@@ -1,0 +1,77 @@
+---
+section: legacy
+date: Last Modified
+title: "Chainlink VRF Supported Networks [v1]"
+metadata:
+  title: "Chainlink VRF v1 Supported Networks"
+---
+
+import VrfCommon from "@features/vrf/v1/common/VrfCommon.astro"
+import ResourcesCallout from "@features/resources/callouts/ResourcesCallout.astro"
+import { Aside } from "@components"
+
+<Aside type="caution" title="Migrate to VRF V2.5">
+  VRF V2.5 replaces both VRF V1 and VRF V2 on November 29, 2024. [Migrate to VRF V2.5](/vrf/v2-5/migration-from-v1).
+</Aside>
+
+Chainlink VRF allows you to integrate provably-fair and verifiably random data in your smart contract.
+
+For implementation details, read [Introduction to Chainlink VRF](/vrf/v1/introduction).
+
+<ResourcesCallout callout="bridgeRisks" />
+
+## Polygon Mainnet
+
+<Aside type="tip" title="Important">
+  The LINK provided by the [Polygon Bridge](https://wallet.polygon.technology/bridge) is not ERC-677 compatible, so
+  cannot be used with Chainlink oracles. However, it can be [**converted to the official LINK token on Polygon using
+  Chainlink's PegSwap service**](https://pegswap.chain.link/)
+</Aside>
+
+| Item            | Value                                                                |
+| --------------- | -------------------------------------------------------------------- |
+| LINK Token      | `0xb0897686c545045aFc77CF20eC7A532E3120E0F1`                         |
+| VRF Coordinator | `0x3d2341ADb2D31f1c5530cDC622016af293177AE0`                         |
+| Key Hash        | `0xf86195cf7690c55907b2b611ebb7343a6f649bff128701cc542f0569e2c549da` |
+| Fee             | 0.0001 LINK                                                          |
+
+<Aside type="note" title="VRF Response Times on Polygon">
+  VRF responses are generated after 10 block confirmations on Polygon by default.
+</Aside>
+
+## BNB Chain Mainnet
+
+<Aside type="note" title="Important">
+  The LINK provided by the [BNB Chain Bridge](https://www.bnbchain.world/en/bridge) is not ERC-677 compatible, so cannot
+  be used with Chainlink oracles. However, it can be [**converted to the official LINK token on BNB Chain using
+  Chainlink's PegSwap service**](https://pegswap.chain.link/).
+</Aside>
+
+| Item            | Value                                                                                |
+| --------------- | ------------------------------------------------------------------------------------ |
+| LINK Token      | `0x404460C6A5EdE2D891e8297795264fDe62ADBB75`                                         |
+| VRF Coordinator | `0x747973a5A2a4Ae1D3a8fDF5479f1514F65Db9C31`                                         |
+| Key Hash        | `0xc251acd21ec4fb7f31bb8868288bfdbaeb4fbfec2df3735ddbd4f7dc8d60103c`                 |
+| Fee             | 0.2 LINK - initial fees on BNB Chain are meant to cover the highest gas cost prices. |
+
+## BNB Chain Testnet
+
+<Aside type="note" title="BNB Chain Faucet">
+  Testnet LINK is available from https://faucets.chain.link/bnb-chain-testnet
+</Aside>
+
+| Item            | Value                                                                 |
+| --------------- | --------------------------------------------------------------------- |
+| LINK            | `0x84b9B910527Ad5C03A9Ca831909E21e236EA7b06`                          |
+| VRF Coordinator | `0xa555fC018435bef5A13C6c6870a9d4C11DEC329C `                         |
+| Key Hash        | `0xcaf3c3727e033261d383b315559476f48034c13b18f8cafed4d871abe5049186 ` |
+| Fee             | 0.1 LINK                                                              |
+
+## Ethereum Mainnet
+
+| Item            | Value                                                                             |
+| --------------- | --------------------------------------------------------------------------------- |
+| LINK Token      | `0x514910771AF9Ca656af840dff83E8264EcF986CA`                                      |
+| VRF Coordinator | `0xf0d54349aDdcf704F77AE15b96510dEA15cb7952`                                      |
+| Key Hash        | `0xAA77729D3466CA35AE8D28B3BBAC7CC36A5031EFDC430821C02BC31A238AF445`              |
+| Fee             | 2 LINK - initial fees on Ethereum are meant to cover the highest gas cost prices. |

@@ -1,20 +1,35 @@
-This is the open source project for the Chainlink documentation.
+<p align="center"><img src="https://raw.githubusercontent.com/smartcontractkit/documentation/main/public/chainlink-docs.svg" style="background: white; padding: 8px;" alt="Chainlink Docs logo" width="400"></p>
+
+Welcome to Chainlink developer documentation repository. This repository is the source for developer documentation on [docs.chain.link](https://docs.chain.link/), which is a resource for smart contract developers and node operators building decentralized applications on several networks.
+
+This documentation is open source. If you want to contribute tutorials or improvements, see the [Contributing](https://github.com/smartcontractkit/documentation/blob/main/CONTRIBUTING.md) guide.
+
+> [!NOTE]
+> The code samples in this documentation are examples for using Chainlink products and services and are provided to help you understand how to
+> interact with Chainlink's systems and services so that you can integrate them into your own. These templates are provided
+> "AS IS" and "AS AVAILABLE" without warranties of any kind, have not been audited, and may be missing key checks or
+> error handling to make the usage of the product more clear. Do not use the example code in a production
+> environment without completing your own audits and application of best practices. Neither Chainlink Labs, the
+> Chainlink Foundation, nor Chainlink node operators are responsible for unintended outputs that are generated due to
+> errors in code.
 
 ## Developing
-    yarn serve
 
-## Building & Deploying
-The site is hosted on a static site CDN. The files are super portable. Builds end up in `_site`.
+To run a local development environment, use the following command:
 
-    yarn deploy
-
-Make sure you use `yarn` and have a recent version of `node` (see the `package.json` for specific version requirements).
+```
+npm install && npm run dev
+```
 
 ## Docs architecture
-* All docs are markdown and stored in `/docs`.
-* Navigation is JSON in `/_data/navigation`
-* Pages are processed as Readme.com markdown, and then syntax highlight is applied client-side
-* Custom client side code powers the ENS page
 
-## Contributing
-See `CONTRIBUTING.md`
+- All docs are markdown and stored in `/src/content`.
+- Navigation is JSON in `/src/config/sidebar.ts`
+
+## Deploy Preview
+
+This repo is configured to automatically create a preview environment on Vercel when a PR is opened. After the deployment is approved, the Vercel bot will leave a comment with a link to the preview on your PR.
+
+## Deploying to Production
+
+This repo is configured to automatically update the production (`https://docs.chain.link`) site when commits are pushed to the `main` branch.

@@ -1,0 +1,225 @@
+---
+section: chainlinkFunctions
+date: Last Modified
+title: "Call Multiple Data Sources"
+---
+
+import { Aside } from "@components"
+import ChainlinkFunctions from "@features/chainlink-functions/common/ChainlinkFunctions.astro"
+
+This tutorial shows you how make multiple API calls from your smart contract to a Decentralized Oracle Network. After [OCR](/chainlink-functions/resources/architecture) completes offchain computation and aggregation, the DON returns the asset price to your smart contract. This example returns the `BTC/USD` price.
+
+This guide assumes that you know how to build HTTP requests and how to use secrets. Read the [API query parameters](/chainlink-functions/tutorials/api-query-parameters) and [API use secrets](/chainlink-functions/tutorials/api-use-secrets) guides before you follow the example in this document.
+To build a decentralized asset price, send a request to the DON to fetch the price from many different API providers. Then, calculate the median price. The API providers in this example are:
+
+- [CoinMarket](https://coinmarketcap.com/api/documentation/v1/)
+- [CoinGecko](https://www.coingecko.com/en/api/documentation)
+- [CoinPaprika](https://api.coinpaprika.com/)
+
+<Aside type="caution">
+  Chainlink Functions is still in BETA. The use of secrets in your requests is an experimental feature that may not
+  operate as expected and is subject to change. Use of this feature is at your own risk and may result in unexpected
+  errors, possible revealing of the secret as new versions are released, or other issues.
+</Aside>
+
+<Aside type="note">
+  Chainlink Functions is a self-service solution. You must ensure that the data sources or APIs specified in requests
+  are of sufficient quality and have the proper availability for your use case. You are responsible for complying with
+  the licensing agreements for all data providers that you connect with through Chainlink Functions. Violations of data
+  provider licensing agreements or the [terms](https://chain.link/terms) can result in suspension or termination of your
+  Chainlink Functions account.
+</Aside>
+
+<ChainlinkFunctions section="prerequisites-guides" />
+
+## Tutorial
+
+This tutorial is configured to get the median `BTC/USD` price from multiple data sources. For a detailed explanation of the code example, read the [Examine the code](#examine-the-code) section.
+
+You can locate the scripts used in this tutorial in the [_examples/8-multiple-apis_ directory](https://github.com/smartcontractkit/smart-contract-examples/tree/main/functions-examples/examples/8-multiple-apis).
+
+1. Make sure your subscription has enough LINK to pay for your requests. Also, you must maintain a minimum balance to upload encrypted secrets to the DON (Read the [minimum balance for uploading encrypted secrets section](/chainlink-functions/resources/billing#minimum-balance-for-uploading-encrypted-secrets) to learn more). You can check your subscription details (including the balance in LINK) in the [Chainlink Functions Subscription Manager](/chainlink-functions/resources/subscriptions). If your subscription runs out of LINK, follow the [Fund a Subscription](/chainlink-functions/resources/subscriptions#fund-a-subscription) guide. This guide recommends maintaining at least 2 LINK within your subscription.
+
+1. Get a free API key from [CoinMarketCap](https://coinmarketcap.com/api/) and note your API key.
+
+1. Run `npx env-enc set` to add an encrypted `COINMARKETCAP_API_KEY` to your `.env.enc` file.
+
+   ```shell
+   npx env-enc set
+   ```
+
+To run the example:
+
+1. Open the file `request.js`, which is located in the `8-multiple-apis` folder.
+1. Replace the consumer contract address and the subscription ID with your own values.
+
+   ```javascript
+   const consumerAddress = "0x8dFf78B7EE3128D00E90611FBeD20A71397064D9" // REPLACE this with your Functions consumer address
+   const subscriptionId = 3 // REPLACE this with your subscription ID
+   ```
+
+1. Make a request:
+
+   ```shell
+   node examples/8-multiple-apis/request.js
+   ```
+
+   The script runs your function in a sandbox environment before making an onchain transaction:
+
+   ```text
+   $ node examples/8-multiple-apis/request.js
+   secp256k1 unavailable, reverting to browser version
+   Start simulation...
+   Simulation result {
+   capturedTerminalOutput: 'Median Bitcoin price: 66822.81\n',
+   responseBytesHexstring: '0x000000000000000000000000000000000000000000000000000000000065f6a9'
+   }
+   ✅ Decoded response to uint256:  6682281n
+
+   Estimate request costs...
+   Fulfillment cost estimated to 1.104471544715335 LINK
+
+   Make request...
+   Upload encrypted secret to gateways https://01.functions-gateway.testnet.chain.link/,https://02.functions-gateway.testnet.chain.link/. slotId 0. Expiration in minutes: 15
+
+   ✅ Secrets uploaded properly to gateways https://01.functions-gateway.testnet.chain.link/,https://02.functions-gateway.testnet.chain.link/! Gateways response:  { version: 1712949659, success: true }
+
+   ✅ Functions request sent! Transaction hash 0x8defda7d48f91efa4f7bfa8e7d99f115a4e1d71882852ee6e91f438542d840ec. Waiting for a response...
+   See your request in the explorer https://sepolia.etherscan.io/tx/0x8defda7d48f91efa4f7bfa8e7d99f115a4e1d71882852ee6e91f438542d840ec
+
+   ✅ Request 0xff18de309a7845ef99b042d008aa3c5e67c51e649b771cbaab7dd96fada66e27 successfully fulfilled. Cost is 0.25590956997723491 LINK.Complete reponse:  {
+   requestId: '0xff18de309a7845ef99b042d008aa3c5e67c51e649b771cbaab7dd96fada66e27',
+   subscriptionId: 2303,
+   totalCostInJuels: 255909569977234910n,
+   responseBytesHexstring: '0x000000000000000000000000000000000000000000000000000000000065f6a9',
+   errorString: '',
+   returnDataBytesHexstring: '0x',
+   fulfillmentCode: 0
+   }
+
+   ✅ Decoded response to uint256:  6682281n
+   ```
+
+   The output of the example gives you the following information:
+
+   - Your request is first run on a sandbox environment to ensure it is correctly configured.
+   - The fulfillment costs are estimated before making the request.
+   - The encrypted secrets were uploaded to the secrets endpoint `https://01.functions-gateway.testnet.chain.link/user`.
+   - Your request was successfully sent to Chainlink Functions.
+   - The DON successfully fulfilled your request. The total cost was: `0.25590956997723491 LINK`.
+   - The consumer contract received a response in `bytes` with a value of `0x000000000000000000000000000000000000000000000000000000000065f6a9`. Decoding it offchain to `uint256` gives you a result: `6682281`. The median BTC price is 66822.81 USD.
+
+## Examine the code
+
+### FunctionsConsumerExample.sol
+
+<ChainlinkFunctions section="functions-consumer" />
+
+### JavaScript example
+
+#### source.js
+
+The Decentralized Oracle Network will run the [JavaScript code](https://github.com/smartcontractkit/smart-contract-examples/blob/main/functions-examples/examples/8-multiple-apis/source.js). The code is self-explanatory and has comments to help you understand all the steps.
+
+<ChainlinkFunctions section="deno-importe-notes" />
+
+This JavaScript source code uses [Functions.makeHttpRequest](/chainlink-functions/api-reference/javascript-source#http-requests) to make HTTP requests. The source code fetches the BTC/USD price from different data sources: `https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest/`, `https://api.coingecko.com/api/v3/simple/price`, and `https://api.coinpaprika.com/v1/tickers/btc-bitcoin` and then calculate the median price. you can read the API docs of [CoinMarketCap](https://coinmarketcap.com/api/documentation/v1/), [CoinGecko](https://www.coingecko.com/en/api/documentation), and [CoinPaprika](https://api.coinpaprika.com/) for details.
+
+To check the expected API responses, run these commands in your terminal:
+
+- CoinMarketCap:
+  ```bash
+  curl -X 'GET' \
+  'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?id=1&convert=USD' \
+  -H 'accept: application/json' \
+  -H 'X-CMC_PRO_API_KEY: REPLACE_WITH_YOUR_API_KEY'
+  ```
+- CoinGecko:
+
+  ```bash
+  curl -X 'GET' \
+  'https://api.coingecko.com/api/v3/simple/price?vs_currencies=USD&ids=bitcoin' \
+  -H 'accept: application/json'
+  ```
+
+- Coinpaprika:
+
+  ```bash
+  curl -X 'GET' \
+  'https://api.coinpaprika.com/v1/tickers/btc-bitcoin' \
+  -H 'accept: application/json'
+  ```
+
+The prices are respectively located at:
+
+- CoinMarketCap: `data,1,quote,USD,price`
+- CoinGecko: `bitcoin,usd`
+- Coinpaprika: `quotes,USD,price`
+
+The main steps of the scripts are:
+
+- Construct the HTTP objects `coinMarketCapRequest`, `coinGeckoRequest`, and `coinPaprikaRequest` using `Functions.makeHttpRequest`. The values for `coinMarketCapCoinId`, `coinGeckoCoinId`, and `coinPaprikaCoinId` are fetched from the `args`.
+- Make the HTTP calls.
+- Read the asset price from each response.
+- Calculate the median of all the prices.
+- Return the result as a [buffer](https://nodejs.org/api/buffer.html#buffer) using the `Functions.encodeUint256` helper function. Because solidity doesn't support decimals, multiply the result by `100` and round the result to the nearest integer. **Note**: Read this [article](https://www.freecodecamp.org/news/do-you-want-a-better-understanding-of-buffer-in-node-js-check-this-out-2e29de2968e8/) if you are new to Javascript Buffers and want to understand why they are important.
+
+#### request.js
+
+This explanation focuses on the [request.js](https://github.com/smartcontractkit/smart-contract-examples/blob/main/functions-examples/examples/8-multiple-apis/request.js) script and shows how to use the [Chainlink Functions NPM package](https://github.com/smartcontractkit/functions-toolkit) in your own JavaScript/TypeScript project to send requests to a DON. The code is self-explanatory and has comments to help you understand all the steps.
+
+The script imports:
+
+- [path](https://nodejs.org/docs/latest/api/path.html) and [fs](https://nodejs.org/api/fs.html) : Used to read the [source file](https://github.com/smartcontractkit/smart-contract-examples/blob/main/functions-examples/examples/8-multiple-apis/source.js).
+- [ethers](https://docs.ethers.org/v5/): Ethers.js library, enables the script to interact with the blockchain.
+- `@chainlink/functions-toolkit`: Chainlink Functions NPM package. All its utilities are documented in the [NPM README](https://github.com/smartcontractkit/functions-toolkit/blob/main/README.md).
+- `@chainlink/env-enc`: A tool for loading and storing encrypted environment variables. Read the [official documentation](https://www.npmjs.com/package/@chainlink/env-enc) to learn more.
+- `../abi/functionsClient.json`: The ABI of the contract your script will interact with. **Note**: The script was tested with this [FunctionsConsumerExample contract](https://remix.ethereum.org/#url=https://docs.chain.link/samples/ChainlinkFunctions/FunctionsConsumerExample.sol).
+
+The script has two hardcoded values that you have to change using your own Functions consumer contract and subscription ID:
+
+```javascript
+const consumerAddress = "0x8dFf78B7EE3128D00E90611FBeD20A71397064D9" // REPLACE this with your Functions consumer address
+const subscriptionId = 3 // REPLACE this with your subscription ID
+```
+
+The primary function that the script executes is `makeRequestSepolia`. This function can be broken into six main parts:
+
+1. Definition of necessary identifiers:
+
+   - `routerAddress`: Chainlink Functions router address on Sepolia.
+   - `donId`: Identifier of the DON that will fulfill your requests on Sepolia.
+   - `gatewayUrls`: The secrets endpoint URL to which you will upload the encrypted secrets.
+   - `explorerUrl`: Block explorer URL of the Sepolia testnet.
+   - `source`: The source code must be a string object. That's why we use `fs.readFileSync` to read `source.js` and then call `toString()` to get the content as a `string` object.
+   - `args`: During the execution of your function, These arguments are passed to the source code. The `args` value is `["1", "bitcoin", "btc-bitcoin"]`. These arguments are BTC IDs at CoinMarketCap, CoinGecko, and Coinpaprika. You can adapt args to fetch other asset prices.
+   - `secrets`: The secrets object that will be encrypted.
+   - `slotIdNumber`: Slot ID at the DON where to upload the encrypted secrets.
+   - `expirationTimeMinutes`: Expiration time in minutes of the encrypted secrets.
+   - `gasLimit`: Maximum gas that Chainlink Functions can use when transmitting the response to your contract.
+   - Initialization of ethers `signer` and `provider` objects. The signer is used to make transactions on the blockchain, and the provider reads data from the blockchain.
+
+1. Simulating your request in a local sandbox environment:
+
+   - Use `simulateScript` from the Chainlink Functions NPM package.
+   - Read the `response` of the simulation. If successful, use the Functions NPM package `decodeResult` function and `ReturnType` enum to decode the response to the expected returned type (`ReturnType.uint256` in this example).
+
+1. Estimating the costs:
+
+   - Initialize a `SubscriptionManager` from the Functions NPM package, then call the `estimateFunctionsRequestCost` function.
+   - The response is returned in Juels (1 LINK = 10\*\*18 Juels). Use the `ethers.utils.formatEther` utility function to convert the output to LINK.
+
+1. Encrypt the secrets, then upload the encrypted secrets to the DON. This is done in two steps:
+
+   - Initialize a `SecretsManager` instance from the Functions NPM package, then call the `encryptSecrets` function.
+   - Call the `uploadEncryptedSecretsToDON` function of the `SecretsManager` instance. This function returns an object containing a `success` boolean as long as `version`, the secret version on the DON storage. **Note**: When making the request, you must pass the slot ID and version to tell the DON where to fetch the encrypted secrets.
+
+1. Making a Chainlink Functions request:
+
+   - Initialize your functions consumer contract using the contract address, abi, and ethers signer.
+   - Call the `sendRequest` function of your consumer contract.
+
+1. Waiting for the response:
+
+   - Initialize a `ResponseListener` from the Functions NPM package and then call the `listenForResponseFromTransaction` function to wait for a response. By default, this function waits for five minutes.
+   - Upon reception of the response, use the Functions NPM package `decodeResult` function and `ReturnType` enum to decode the response to the expected returned type (`ReturnType.uint256` in this example).

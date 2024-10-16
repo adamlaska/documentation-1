@@ -12,27 +12,30 @@ jobs:
       contents: write
     name: Check if chains metadata is up to date
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # v3.0.2
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
       - name: Install Dependencies
-        run: yarn
+        run: npm i
       - name: Compare current chains metadata with the source
-        run: yarn compare-chains-metadata
+        run: npm run compare-chains-metadata
       - name: Check if new chains metadata file
         id: compare_chains
         run: |
           set -x
-          if test -f "./_src/reference/chainsToBe.json"; then
-            cp "./_src/reference/chainsToBe.json" "./_src/reference/chains.json"
-            echo "::set-output name=createPR::true"
+          if test -f "src/scripts/reference/chainsToBe.json"; then
+            cp "src/scripts/reference/chainsToBe.json" "src/scripts/reference/chains.json"
+            echo "createPR=true" >> $GITHUB_OUTPUT
             timestamp=$(date +%Y%m%d%H%M)
-            echo "::set-output name=timestamp::${timestamp}"
+            echo "timestamp=${timestamp}" >> $GITHUB_OUTPUT
           fi
       - if: ${{ steps.compare_chains.outputs.createPR }}
         id: chains_metadata_pr
         name: Create pull request
-        uses: peter-evans/create-pull-request@9825ae65b1cb54b543b938503728b432a0176d29 # v3.1.0
+        uses: peter-evans/create-pull-request@6d6857d36972b65feb161a90e484f2984215f83e # v6.0.5
         with:
           branch: 'chains_metadata/pr-${{ steps.compare_chains.outputs.timestamp }}'
           commit-message: 'chains metadata updated'

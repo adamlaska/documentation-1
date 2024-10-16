@@ -1,0 +1,84 @@
+---
+section: dataFeeds
+date: Last Modified
+title: "Using Data Feeds on Starknet"
+isIndex: true
+whatsnext:
+  {
+    "Starknet Price Feed Contract Addresses": "/data-feeds/price-feeds/addresses?network=starknet",
+    "Deploy and interact with a Consumer Contract using Starknet Foundry": "/data-feeds/starknet/tutorials/snfoundry/consumer-contract",
+  }
+metadata:
+  description: "Explore how to use Chainlink Data Feeds on Starknet to power your applications with data."
+---
+
+import { CopyText } from "@components"
+
+Starknet is a permissionless decentralized Zk-rollup operating as an L2 network over Ethereum. Unlike other Ethereum L2 networks, Starknet is not EVM-compatible and uses [Cairo](https://docs.cairo-lang.org/index.html) as its smart contract language. Chainlink Data Feeds are available on Starknet Sepolia as Cairo smart contracts.
+
+### Offchain examples
+
+You can read Chainlink Data Feeds offchain without a Starknet account. Complete these steps using only the [Starkli CLI](#getting-started-starkli-cli) or the [Starknet Foundry](/data-feeds/starknet/tutorials/snfoundry/read-data) toolkit.
+
+### Onchain examples
+
+You can read Chainlink Data Feeds on Starknet Sepolia using an [onchain contract](/data-feeds/starknet/tutorials/snfoundry/consumer-contract) that you compile, declare, and deploy using [Starknet Foundry](https://github.com/foundry-rs/starknet-foundry).
+
+### Devnet examples
+
+Experiment with Chainlink Data Feeds on Starknet using [Starknet Devnet RS](https://github.com/0xSpaceShard/starknet-devnet-rs), a local Docker-based testnet environment implemented using Rust.
+The [Starknet Devnet RS guide](/data-feeds/starknet/tutorials/snfoundry/sn-devnet-rs) provides code examples and scripts that enable you to compile, declare, and deploy your own aggregator and consumer contracts. You can use a set of pre-funded accounts to interact with Chainlink Data Feeds on Starknet without deploying to a live network.
+
+## Getting Started (Starkli CLI)
+
+[Starkli](https://github.com/xJonathanLEI/starkli) is a Starknet standalone CLI similar to [cairo-lang](https://github.com/starkware-libs/cairo-lang), but it is written in Rust. It enables interaction with a Starknet network without the need for extra tools or dependencies.
+
+In this example, you will use the `starkli call` command to read data from a Chainlink Price Feed on Starknet Sepolia. This command requires the proxy aggregator address, the function selector, and an RPC endpoint for Starknet Sepolia.
+
+### Requirements
+
+Make sure you have the Starkli CLI installed. You can check your current version by running <CopyText text="starkli --version" code/> in your terminal. Expect an output similar to the following:
+
+```bash
+starkli --version
+0.2.8 (f59724e)
+```
+
+Follow the official [installation guide](<(https://book.starkli.rs/installation)>) if necessary.
+
+### Read data from a Chainlink Price Feed
+
+Use the following command to call the `latest_round_data` function on the ETH / USD Chainlink Price Feed aggregator proxy:
+
+```bash
+starkli call \
+0x228128e84cdfc51003505dd5733729e57f7d1f7e54da679474e73db4ecaad44 \
+latest_round_data \
+--rpc https://starknet-sepolia.public.blastapi.io/rpc/v0_7
+```
+
+Expect an output similar to the following:
+
+```bash
+[
+    "0x000000000000000000000000000000010000000000000000000000000000320c",
+    "0x0000000000000000000000000000000000000000000000000000005293770eb1",
+    "0x000000000000000000000000000000000000000000000000000000000000d44d",
+    "0x000000000000000000000000000000000000000000000000000000006606b8cc",
+    "0x000000000000000000000000000000000000000000000000000000006606b8a2"
+]
+```
+
+The example output contains an array with the hex-encoded latest round data for the ETH / USD Chainlink Price Feed on Starknet Sepolia. The array contains the following values:
+
+| Value name   | Hex-encoded value                                                    | Decoded value                             | Description                                                                                                      |
+| ------------ | -------------------------------------------------------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `round_id`   | `0x000000000000000000000000000000010000000000000000000000000000320c` | `340282366920938463463374607431768224268` | The unique identifier of the data round                                                                          |
+| `answer`     | `0x0000000000000000000000000000000000000000000000000000005293770eb1` | `354661371569`                            | The actual data provided by the data feed, representing the latest price of an asset in the case of a price feed |
+| `block_num`  | `0x000000000000000000000000000000000000000000000000000000000000d44d` | `54349`                                   | The block number at which the data was recorded on the blockchain                                                |
+| `started_at` | `0x000000000000000000000000000000000000000000000000000000006606b8cc` | `1711716556`                              | The Unix timestamp indicating when the data round started                                                        |
+| `updated_at` | `0x000000000000000000000000000000000000000000000000000000006606b8a2` | `1711716514`                              | The Unix timestamp indicating when the data was last updated                                                     |
+
+For a complete list of Chainlink Price Feeds available on Starknet, see the [Price Feed Contract Addresses](/data-feeds/price-feeds/addresses?network=starknet) page.
+
+Note: This example uses a [Blast API](https://blastapi.io/public-api/starknet) RPC endpoint. You can interact with the network using any other Starknet Sepolia RPC provider, such as [Alchemy](https://www.alchemy.com/starknet) or [Infura](https://www.infura.io/networks/ethereum/starknet).

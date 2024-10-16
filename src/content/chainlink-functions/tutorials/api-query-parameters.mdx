@@ -1,0 +1,206 @@
+---
+section: chainlinkFunctions
+date: Last Modified
+title: "Call an API with HTTP Query Parameters"
+---
+
+import { Aside } from "@components"
+import ChainlinkFunctions from "@features/chainlink-functions/common/ChainlinkFunctions.astro"
+
+This tutorial shows you how to send a request to a Decentralized Oracle Network to call the [Cryptocompare GET /data/pricemultifull API](https://min-api.cryptocompare.com/documentation?key=Price&cat=multipleSymbolsFullPriceEndpoint). After [OCR](/chainlink-functions/resources/architecture) completes offchain computation and aggregation, it returns the asset price for ETH/USD to your smart contract. This guide also shows you how to configure HTTP query parameters to request different asset prices.
+
+<Aside type="note">
+  Chainlink Functions is a self-service solution. You must ensure that the data sources or APIs specified in requests
+  are of sufficient quality and have the proper availability for your use case. You are responsible for complying with
+  the licensing agreements for all data providers that you connect with through Chainlink Functions. Violations of data
+  provider licensing agreements or the [terms](https://chain.link/terms) can result in suspension or termination of your
+  Chainlink Functions account.
+</Aside>
+
+<ChainlinkFunctions section="prerequisites-guides" />
+
+## Tutorial
+
+This tutorial is configured to get the `ETH/USD` price. For a detailed explanation of the code example, read the [Examine the code](#examine-the-code) section.
+
+You can locate the scripts used in this tutorial in the [_examples/2-call-api_ directory](https://github.com/smartcontractkit/smart-contract-examples/tree/main/functions-examples/examples/2-call-api).
+
+To run the example:
+
+1. Open the file `request.js`, which is located in the `2-call-api` folder.
+1. Replace the consumer contract address and the subscription ID with your own values.
+
+   ```javascript
+   const consumerAddress = "0x8dFf78B7EE3128D00E90611FBeD20A71397064D9" // REPLACE this with your Functions consumer address
+   const subscriptionId = 3 // REPLACE this with your subscription ID
+   ```
+
+1. Make a request:
+
+   ```shell
+   node examples/2-call-api/request.js
+   ```
+
+   The script runs your function in a sandbox environment before making an onchain transaction:
+
+   ```text
+   $ node examples/2-call-api/request.js
+   secp256k1 unavailable, reverting to browser version
+   Start simulation...
+    Simulation result {
+      capturedTerminalOutput: 'HTTP GET Request to https://min-api.cryptocompare.com/data/pricemultifull?fsyms=ETH&tsyms=USD\n' +
+        'ETH price is: 3420.54 USD\n',
+      responseBytesHexstring: '0x0000000000000000000000000000000000000000000000000000000000053826'
+    }
+    ✅ Decoded response to uint256:  342054n
+
+    Estimate request costs...
+    Fulfillment cost estimated to 1.004325887213695 LINK
+
+    Make request...
+
+    ✅ Functions request sent! Transaction hash 0xbbe473ccc6593b6f3baf30fd66b2329b05a32fe0321a319d09142f4b9ba4547c. Waiting for a response...
+    See your request in the explorer https://sepolia.etherscan.io/tx/0xbbe473ccc6593b6f3baf30fd66b2329b05a32fe0321a319d09142f4b9ba4547c
+
+    ✅ Request 0xe55201188012e3ec198427937f7897729999ab7b287207ff8f0c157a9662e5f0 successfully fulfilled. Cost is 0.249819373001796045 LINK.Complete reponse:  {
+      requestId: '0xe55201188012e3ec198427937f7897729999ab7b287207ff8f0c157a9662e5f0',
+      subscriptionId: 2303,
+      totalCostInJuels: 249819373001796045n,
+      responseBytesHexstring: '0x0000000000000000000000000000000000000000000000000000000000053892',
+      errorString: '',
+      returnDataBytesHexstring: '0x',
+      fulfillmentCode: 0
+    }
+
+    ✅ Decoded response to uint256:  342162n
+   ```
+
+   The output of the example gives you the following information:
+
+   - Your request is first run on a sandbox environment to ensure it is correctly configured.
+   - The fulfillment costs are estimated before making the request.
+   - Your request was successfully sent to Chainlink Functions. The transaction in this example is [0xbbe473ccc6593b6f3baf30fd66b2329b05a32fe0321a319d09142f4b9ba4547c](https://sepolia.etherscan.io/tx/0xbbe473ccc6593b6f3baf30fd66b2329b05a32fe0321a319d09142f4b9ba4547c) and the request ID is `0xe55201188012e3ec198427937f7897729999ab7b287207ff8f0c157a9662e5f0`.
+
+   - The DON successfully fulfilled your request. The total cost was: `0.249819373001796045 LINK`.
+   - The consumer contract received a response in `bytes` with a value of `0x0000000000000000000000000000000000000000000000000000000000053892`. Decoding it offchain to `uint256` gives you a result: `342162`.
+
+## Examine the code
+
+### FunctionsConsumerExample.sol
+
+<ChainlinkFunctions section="functions-consumer" />
+
+### JavaScript example
+
+#### source.js
+
+The Decentralized Oracle Network will run the [JavaScript code](https://github.com/smartcontractkit/smart-contract-examples/blob/main/functions-examples/examples/2-call-api/source.js). The code is self-explanatory and has comments to help you understand all the steps.
+
+<ChainlinkFunctions section="deno-importe-notes" />
+
+This JavaScript source code uses [Functions.makeHttpRequest](/chainlink-functions/api-reference/javascript-source#http-requests) to make HTTP requests. To request the `ETH/USD` price, the source code calls the `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=ETH&tsyms=USD` URL. If you read the [Functions.makeHttpRequest](/chainlink-functions/api-reference/javascript-source#http-requests) documentation, you see that you must provide the following parameters:
+
+- `url`: `https://min-api.cryptocompare.com/data/pricemultifull`
+- `params`: The query parameters object:
+
+  ```
+  {
+    fsyms: fromSymbol,
+    tsyms: toSymbol
+  }
+  ```
+
+To check the expected API response, you can directly paste the following URL in your browser `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=ETH&tsyms=USD` or run the `curl` command in your terminal:
+
+```bash
+curl -X 'GET' \
+  'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=ETH&tsyms=USD' \
+  -H 'accept: application/json'
+```
+
+The response should be similar to the following example:
+
+{/* prettier-ignore */}
+```json
+{
+  "RAW": {
+    "ETH": {
+      "USD": {
+        "TYPE": "5",
+        "MARKET": "CCCAGG",
+        "FROMSYMBOL": "ETH",
+        "TOSYMBOL": "USD",
+        "FLAGS": "2049",
+        "PRICE": 2867.04,
+        "LASTUPDATE": 1650896942,
+        "MEDIAN": 2866.2,
+        "LASTVOLUME": 0.16533939,
+        "LASTVOLUMETO": 474.375243849,
+        "LASTTRADEID": "1072154517",
+        "VOLUMEDAY": 195241.78281014622,
+        "VOLUMEDAYTO": 556240560.4621655,
+        "VOLUME24HOUR": 236248.94641103,
+        ...
+}
+```
+
+The price is located at `RAW,ETH,USD,PRICE`.
+
+The main steps of the scripts are:
+
+- Fetch `fromSymbol` and `toSymbol` from `args`.
+- Construct the HTTP object `cryptoCompareRequest` using `Functions.makeHttpRequest`.
+- Make the HTTP call.
+- Read the asset price from the response.
+- Return the result as a [buffer](https://nodejs.org/api/buffer.html#buffer) using the `Functions.encodeUint256` helper function. Because solidity doesn't support decimals, multiply the result by `100` and round the result to the nearest integer. **Note**: Read this [article](https://www.freecodecamp.org/news/do-you-want-a-better-understanding-of-buffer-in-node-js-check-this-out-2e29de2968e8/) if you are new to Javascript Buffers and want to understand why they are important.
+
+#### request.js
+
+This explanation focuses on the [request.js](https://github.com/smartcontractkit/smart-contract-examples/blob/main/functions-examples/examples/2-call-api/request.js) script and shows how to use the [Chainlink Functions NPM package](https://github.com/smartcontractkit/functions-toolkit) in your own JavaScript/TypeScript project to send requests to a DON. The code is self-explanatory and has comments to help you understand all the steps.
+
+The script imports:
+
+- [path](https://nodejs.org/docs/latest/api/path.html) and [fs](https://nodejs.org/api/fs.html) : Used to read the [source file](https://github.com/smartcontractkit/smart-contract-examples/blob/main/functions-examples/examples/2-call-api/source.js).
+- [ethers](https://docs.ethers.org/v5/): Ethers.js library, enables the script to interact with the blockchain.
+- `@chainlink/functions-toolkit`: Chainlink Functions NPM package. All its utilities are documented in the [NPM README](https://github.com/smartcontractkit/functions-toolkit/blob/main/README.md).
+- `@chainlink/env-enc`: A tool for loading and storing encrypted environment variables. Read the [official documentation](https://www.npmjs.com/package/@chainlink/env-enc) to learn more.
+- `../abi/functionsClient.json`: The abi of the contract your script will interact with. **Note**: The script was tested with this [FunctionsConsumerExample contract](https://remix.ethereum.org/#url=https://docs.chain.link/samples/ChainlinkFunctions/FunctionsConsumerExample.sol).
+
+The script has two hardcoded values that you have to change using your own Functions consumer contract and subscription ID:
+
+```javascript
+const consumerAddress = "0x8dFf78B7EE3128D00E90611FBeD20A71397064D9" // REPLACE this with your Functions consumer address
+const subscriptionId = 3 // REPLACE this with your subscription ID
+```
+
+The primary function that the script executes is `makeRequestSepolia`. This function consists of five main parts:
+
+1. Definition of necessary identifiers:
+
+   - `routerAddress`: Chainlink Functions router address on Sepolia.
+   - `donId`: Identifier of the DON that will fulfill your requests on Sepolia.
+   - `explorerUrl`: Block explorer URL of the Sepolia testnet.
+   - `source`: The source code must be a string object. That's why we use `fs.readFileSync` to read `source.js` and then call `toString()` to get the content as a `string` object.
+   - `args`: During the execution of your function, These arguments are passed to the source code. The `args` value is `["ETH", "USD"]`, which fetches the current `ETH/USD` price. You can adapt `args` to fetch another asset price. See the [CryptoCompare API docs](https://min-api.cryptocompare.com/documentation?key=Price&cat=multipleSymbolsFullPriceEndpoint) to get the list of supported symbols.
+   - `gasLimit`: Maximum gas that Chainlink Functions can use when transmitting the response to your contract.
+   - Initialization of ethers `signer` and `provider` objects. The signer is used to make transactions on the blockchain, and the provider reads data from the blockchain.
+
+1. Simulating your request in a local sandbox environment:
+
+   - Use `simulateScript` from the Chainlink Functions NPM package.
+   - Read the `response` of the simulation. If successful, use the Functions NPM package `decodeResult` function and `ReturnType` enum to decode the response to the expected returned type (`ReturnType.uint256` in this example).
+
+1. Estimating the costs:
+
+   - Initialize a `SubscriptionManager` from the Functions NPM package, then call the `estimateFunctionsRequestCost`.
+   - The response is returned in Juels (1 LINK = 10\*\*18 Juels). Use the `ethers.utils.formatEther` utility function to convert the output to LINK.
+
+1. Making a Chainlink Functions request:
+
+   - Initialize your functions consumer contract using the contract address, abi, and ethers signer.
+   - Call the `sendRequest` function of your consumer contract.
+
+1. Waiting for the response:
+
+   - Initialize a `ResponseListener` from the Functions NPM package and then call the `listenForResponseFromTransaction` function to wait for a response. By default, this function waits for five minutes.
+   - Upon reception of the response, use the Functions NPM package `decodeResult` function and `ReturnType` enum to decode the response to the expected returned type (`ReturnType.uint256` in this example).

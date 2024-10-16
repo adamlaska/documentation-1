@@ -1,0 +1,258 @@
+---
+section: chainlinkFunctions
+date: Last Modified
+title: "Managing CL Functions Subscriptions"
+---
+
+import { Aside, ClickToZoom } from "@components"
+
+<Aside type="note" title="Mainnet Beta">
+Chainlink Functions is available on mainnet only as a BETA preview to ensure that this new platform is robust and secure for developers. While in BETA, developers must follow best practices and not use the BETA for any mission-critical application or secure any value. Chainlink Functions is likely to evolve and improve. Breaking changes might occur while the service is in BETA. Monitor these docs to stay updated on feature improvements along with interface and contract changes.
+
+</Aside>
+
+<Aside type="note">
+Chainlink Functions is a self-service solution. You are responsible for independently reviewing any code and API dependencies that you submit in a request. Community-created code examples might not be audited, so you must independently review this code before you use it.
+
+Chainlink Functions is offered "as is" and "as available" without conditions or warranties of any kind. Neither Chainlink Labs, the Chainlink Foundation, nor Chainlink node operators are responsible for unintended outputs from Functions due to issues in your code or downstream issues with API dependencies. You must ensure that the data sources or APIs specified in requests are of sufficient quality and have the proper availability for your use case. Users are responsible for complying with the licensing agreements for all data providers that they connect with through Chainlink Functions. Violations of data provider licensing agreements or the [terms](https://chain.link/terms) can result in suspension or termination of your Chainlink Functions account or subscription.
+
+</Aside>
+
+The Chainlink Functions Subscription Manager is available [here](https://functions.chain.link/). The Functions Subscription Manager lets you create a subscription, add consumers to it, remove consumers from it, fund it with LINK, and delete it.
+
+When you connect to the Subscription Manager, choose the correct network, then click _connect wallet_.
+
+## Subscriptions
+
+You use a Chainlink Functions subscription to pay for, manage, and track Functions requests.
+
+### Create a subscription
+
+1. Open [functions.chain.link](https://functions.chain.link/) and click _Create Subscription_:
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/frontend-landing-wallet-connected.jpg"
+     alt="Chainlink Functions subscription landing page"
+   />
+
+1. Provide an email address and an optional subscription name:
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/create-subscription.jpg"
+     alt="Chainlink Functions create subscription"
+   />
+
+1. The first time that you interact with the Subscription Manager using your EOA, you have to approve the Terms of Service (ToS):
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/acceptTos.jpg"
+     alt="Chainlink Functions accept ToS"
+   />
+
+1. When you approve the ToS, a MetaMask popup appears that asks you to approve the subscription creation:
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/approve-create-subscription.jpg"
+     alt="Chainlink Functions approve subscriptions creation"
+   />
+
+1. After the subscription is created, you are asked to sign a message in MetaMask to link the subscription name and email address to your subscription:
+
+<ClickToZoom
+  src="/images/chainlink-functions/tutorials/subscription/sign-message-tos.jpg"
+  alt="Chainlink Functions sign message ToS"
+/>
+
+{" "}
+
+<ClickToZoom
+  src="/images/chainlink-functions/tutorials/subscription/sign-message-tos-metamask.jpg"
+  alt="Chainlink Functions sign message ToS MetaMask"
+/>
+
+1. After the subscription is created, fund it with LINK:
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/subscription-created-add-funds.jpg"
+     alt="Chainlink Functions subscription add funds"
+   />
+
+1. After funding, you can add a consumer to it:
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/subscription-created-add-consumer.jpg"
+     alt="Chainlink Functions subscription add consumer"
+   />
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/subscription-created-add-consumer-2.jpg"
+     alt="Chainlink Functions subscription add consumer"
+   />
+
+1. After creation, you can fetch the details of your subscription:
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/subscription-details-after-creation.jpg"
+     alt="Chainlink Functions subscription details"
+   />
+
+### Fund a subscription
+
+1. Open your subscription details and click _Actions_ then click _Fund subscription_:
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/your-subscription-click-fund.jpg"
+     alt="Chainlink Functions click fund"
+   />
+
+1. Fund your subscription. For instance, _0.1 LINK_:
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/your-subscription-add-fund.jpg"
+     alt="Chainlink Functions add fund to your subscription"
+   />
+
+1. A MetaMask popup appears, and you are asked to confirm the transaction. After you confirm the transaction, a confirmation screen appears:
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/your-subscription-funded.jpg"
+     alt="Chainlink Functions subscription funded"
+   />
+
+### Add a consumer contract to a subscription
+
+1. Open your subscription details and click _Add Consumer_:
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/your-subscription-add-consumer.jpg"
+     alt="Chainlink Functions add consumer"
+   />
+
+1. Fill in the consumer address:
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/your-subscription-fill-consumer.jpg"
+     alt="Chainlink Functions provider consumer address"
+   />
+
+1. A MetaMask popup appears, and you are asked to confirm the transaction. After you confirm the transaction, a confirmation screen appears:
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/your-subscription-consumer-added.jpg"
+     alt="Chainlink Functions consumer added"
+   />
+
+### Remove a consumer contract from a subscription
+
+1. Open your subscription details and click the consumer you want to remove, then _Remove Consumer_:
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/your-subscription-remove-consumer.jpg"
+     alt="Chainlink Functions remove consumer"
+   />
+
+1. A MetaMask popup appears, and you are asked to confirm the transaction.
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/your-subscription-remove-consumer-confirm.jpg"
+     alt="Chainlink Functions confirm the removal of the consumer"
+   />
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/your-subscription-remove-consumer-confirm2.jpg"
+     alt="Chainlink Functions confirm the removal of the consumer in MetaMask"
+   />
+
+1. After you confirm the transaction, a confirmation screen appears:
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/your-subscription-consumer-removed.jpg"
+     alt="Chainlink Functions consumer removed"
+   />
+
+### Cancel a subscription
+
+**Note**: You cannot cancel a subscription if there are in-flight requests. In-flight requests are requests that still need to be fulfilled.
+
+1. Open your subscription details, click _Actions_, then _Cancel subscription_:
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/your-subscription-cancel.jpg"
+     alt="Chainlink Functions cancel subscription"
+   />
+
+1. Fill in the receiver address of the remaining funds:
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/your-subscription-cancel2.jpg"
+     alt="Chainlink Functions cancel subscription"
+   />
+
+1. A MetaMask popup appears, and you are asked to confirm the transaction.
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/your-subscription-cancel-confirm.jpg"
+     alt="Chainlink Functions confirm the removal of the subscription"
+   />
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/your-subscription-cancel-confirm2.jpg"
+     alt="Chainlink Functions confirm the removal of the subscription in MetaMask"
+   />
+
+1. After you confirm the transaction, a confirmation screen appears:
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/subscription/your-subscription-cancelled.jpg"
+     alt="Chainlink Functions subscription canceled"
+   />
+
+## Time out pending requests manually
+
+The Subscription Manager provides the option to time out requests manually. You can time out requests that have been pending for longer than five minutes to unlock your subscription funds.
+
+1. Open your subscription details and scroll to the **Pending** section. If a request has been pending longer than five minutes, its status displays as _Time out required_. Click the link within the red banner that says **Time out request**:
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/request-timeout/1-request-eligible-for-timeout.png"
+     alt="Pending Functions request eligible for timeout"
+   />
+
+   If you have multiple requests that are eligible for timeout, the **Time out request** link in the red banner times out all the requests at once.
+
+   Alternatively, you can time out an individual request. Open the **Actions** menu for that request, and click **Time out request**:
+
+   {" "}
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/request-timeout/individual-request-timeout.png"
+     alt="Individual request timeout"
+   />
+
+1. A MetaMask popup appears, and you are asked to confirm the transaction:
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/request-timeout/2-approve-timeout-transaction.png"
+     alt="Prompt to approve timeout transaction"
+   />
+
+1. After you confirm the transaction, a confirmation screen appears:
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/request-timeout/3-timeout-successful-confirmation.png"
+     alt="Timeout transaction confirmation"
+   />
+
+1. The subscription details page displays another confirmation in the upper right corner showing that the request has been timed out successfully:
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/request-timeout/4-subscription-page-updates.png"
+     alt="Request timed out dialog"
+   />
+
+1. The timed out request appears in the **Failed fulfillments** tab of the **History** section:
+
+   <ClickToZoom
+     src="/images/chainlink-functions/tutorials/request-timeout/5-failed-fulfillments.png"
+     alt="Chainlink Functions subscription canceled"
+   />

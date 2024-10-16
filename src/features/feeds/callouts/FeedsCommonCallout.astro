@@ -1,0 +1,19 @@
+---
+const feedQuality = await Astro.glob("./feed-quality.mdx")
+const FeedQualityComponent = feedQuality[0].Content
+
+const porVerification = await Astro.glob("./por-verification.mdx")
+const PorVerificationComponent = porVerification[0].Content
+
+const porWalletAddressManager = await Astro.glob("./por-wallet-address-manager.mdx")
+const PorWalletAddressManagerComponent = porWalletAddressManager[0].Content
+
+export type Props = {
+  callout?: "quality" | "porVerification" | "porWalletAddressManager"
+}
+const { callout } = Astro.props as Props
+---
+
+{callout === "quality" && <FeedQualityComponent />}
+{callout === "porVerification" && <PorVerificationComponent />}
+{callout === "porWalletAddressManager" && <PorWalletAddressManagerComponent />}
