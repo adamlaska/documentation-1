@@ -1,0 +1,36 @@
+.container,
+.contentContainer {
+  margin-top: var(--space-2x);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1x);
+}
+
+.container .tab {
+  padding: var(--space-1x) var(--space-2x);
+  margin-right: var(--space-2x);
+}
+
+.contentContainer .contentTab {
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+  padding: var(--space-2x) var(--space-3x);
+  margin-bottom: var(--space-3x);
+  outline-offset: 2px;
+}
+
+.contentTabPrimary {
+  color: var(--blue-600);
+  border-color: var(--blue-600);
+  border-bottom: var(--border-width-secondary) solid var(--blue-600);
+}
+.contentTabSecondary {
+  color: var(--color-text-primary);
+}
+.contentTabSecondary:hover {
+  color: var(--blue-900);
+  border-bottom: var(--border-width-secondary) solid var(--blue-800);
+}

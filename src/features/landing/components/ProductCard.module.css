@@ -1,0 +1,116 @@
+.productCardWrapper {
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 0;
+}
+.productCard {
+  width: 100%;
+  background-color: white;
+  border-radius: 10px;
+  align-items: center;
+  padding: var(--space-4x);
+  transition: border-color 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  overflow: hidden;
+  max-width: 100%;
+  border: 1px solid var(--Card-Border, #e4e8ed);
+}
+.productCard:hover {
+  box-shadow: 0 8px 12px rgba(26, 43, 107, 0.1);
+  background: var(--Blue-Blue-50, #eff6ff);
+}
+.logo {
+  width: var(--space-6x);
+  height: var(--space-6x);
+  margin-right: var(--space-3x);
+  align-self: flex-start;
+}
+.content {
+  position: relative;
+  overflow: visible;
+}
+.heading {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-weight: 500;
+  line-height: 1.3em;
+  opacity: 1;
+  transition: opacity ease 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.heading h3 {
+  margin: 0;
+  padding: 0;
+  color: var(--gray-900);
+  font-size: var(--space-4x);
+}
+
+.paragraph,
+.chains {
+  display: none;
+}
+.chainsSupported {
+  opacity: 0.7;
+  color: #1a2b6b;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  background-color: transparent;
+  margin-bottom: 16px;
+  font-size: 10px;
+  font-weight: 500;
+}
+.chainsWrap {
+  margin-top: -8px;
+}
+.chainsLogo {
+  width: 24px;
+  height: 24px;
+  margin-top: 8px;
+  margin-right: 8px;
+  max-width: 100%;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+@media screen and (min-width: 768px) {
+  .heading {
+    margin-bottom: 12px;
+  }
+  .heading h3 {
+    font-size: var(--space-6x);
+  }
+  .paragraph {
+    display: block;
+    color: var(--gray-600);
+    margin-bottom: 0;
+    transition: opacity ease 0.2s;
+    opacity: 1;
+  }
+  .chains {
+    opacity: 0;
+    display: block;
+    transform: translateY(100%);
+    padding-top: 16px;
+    padding-bottom: 16px;
+    position: absolute;
+    top: -15px;
+    bottom: auto;
+    left: 0%;
+    right: auto;
+    transition: all ease 0.3s;
+  }
+  .productCard {
+    align-items: start;
+    flex-direction: column;
+    padding: var(--space-6x);
+  }
+  .logo {
+    width: var(--space-12x);
+    height: var(--space-12x);
+    margin-right: var(--space-4x);
+  }
+}

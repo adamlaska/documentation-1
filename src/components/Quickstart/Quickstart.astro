@@ -1,0 +1,203 @@
+<article id="article">
+  <slot />
+</article>
+
+<style is:inline>
+  article {
+    margin-top: var(--space-4x);
+  }
+
+  article * {
+    margin-top: 0;
+    margin-bottom: 0;
+    max-width: 100%;
+  }
+
+  article section:target {
+    scroll-margin-top: var(--theme-navbar-height);
+  }
+
+  article section > section:target {
+    scroll-margin-top: calc(var(--theme-navbar-height) + var(--space-12x));
+  }
+
+  article > :not(section, astro-slot, astro-island, ul, ol),
+  article :where(section, astro-slot, astro-island) > :not(section, astro-slot, astro-island, ul, ol) {
+    margin-top: var(--space-5x);
+  }
+
+  :where(article, article section) > :not(astro-accordion, h2, h3, h4):has(+ astro-accordion) {
+    margin-bottom: var(--space-5x);
+  }
+
+  :where(article, article section) > h2 + :not(section, astro-slot, astro-island) {
+    margin-top: 0 !important;
+  }
+
+  :where(article, article section) > :is(h3, h4) + :not(section, astro-slot, astro-island) {
+    margin-top: var(--space-5x) !important;
+  }
+
+  /* See PageContent.astro */
+  :where(article, astro-island, astro-slot) > section {
+    padding-top: var(--space-5x);
+  }
+
+  /* See PageContent.astro */
+  article > h2 {
+    margin-top: var(--space-5x) !important;
+  }
+
+  article :is(h2, h3, h4, h5, h6) {
+    margin-top: 0 !important;
+  }
+
+  article :is(h2, h3, h4, h5, h6, p, li) {
+    word-break: break-word;
+  }
+
+  :where(article, article section) > :is(h2, h3, h4, h5, h6) > a {
+    display: inline-block;
+    color: inherit;
+    width: 100%;
+  }
+
+  :where(article, article section) > :is(h2, h3, h4, h5, h6) {
+    color: black;
+    margin-top: 0;
+  }
+
+  :where(article, article section) > h2 {
+    font-size: 24px;
+    top: 0;
+    position: sticky;
+    z-index: 3;
+    background: rgba(255, 255, 255, 0.93);
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.93) 15%);
+    padding-top: var(--space-8x);
+    padding-bottom: var(--space-5x);
+  }
+
+  :where(article, article section) > h2 > a {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-clamp: 3;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  :where(article, article section) > h3 {
+    padding-top: var(--space-6x);
+    font-size: 20px;
+  }
+
+  :where(article, article section) > h4 {
+    padding-top: var(--space-6x);
+  }
+
+  :where(article, article section) > :is(h4, h5, h6) {
+    font-size: 16px;
+  }
+
+  article ul {
+    padding-left: calc(var(--space-2x) + 2px);
+    list-style: none;
+  }
+
+  article ol {
+    padding-left: calc(var(--space-6x) + 2px);
+  }
+
+  article :is(ul, ol) {
+    margin-top: var(--space-3x);
+  }
+
+  article :is(ul, ol) > li,
+  article :is(ul, ol) > li > :is(ul, ol) {
+    margin-top: var(--space-1x);
+  }
+
+  article li {
+    line-height: 1.5;
+  }
+
+  article li > * {
+    margin-top: var(--space-2x);
+  }
+
+  article ul > li {
+    position: relative;
+    left: 0.5rem;
+    padding-right: 1rem;
+  }
+
+  article ul > li::before {
+    position: absolute;
+    content: "●";
+    font-size: 0.5rem;
+    top: 6.5px;
+    left: -1rem;
+  }
+
+  @media (min-width: 48em) {
+    article {
+      margin-top: 0;
+    }
+
+    article > :not(section, astro-slot, astro-island, ul, ol),
+    article :where(section, astro-slot, astro-island) > :not(section, astro-slot, astro-island, ul, ol) {
+      margin-top: var(--space-6x);
+    }
+
+    :where(article, article section) > :not(astro-accordion, h2, h3, h4):has(+ astro-accordion) {
+      margin-bottom: var(--space-6x);
+    }
+
+    :where(article, article section) > :is(h3, h4) + :not(section, astro-slot, astro-island) {
+      margin-top: var(--space-5x) !important;
+    }
+
+    :where(article, article section) > :is(h2, h3, h4, h5, h6) {
+      color: var(--blue-800, #1a2b6b);
+    }
+
+    :where(article, article section) > h2 {
+      font-size: 28px;
+      padding-bottom: var(--space-5x);
+    }
+
+    /* See PageContent.astro */
+    :where(article, astro-island, astro-slot) > section {
+      padding-top: var(--space-6x);
+    }
+
+    /* See PageContent.astro */
+    article > h2 {
+      margin-top: var(--space-6x) !important;
+    }
+
+    :where(article, article section) > h3 {
+      font-size: 24px;
+    }
+
+    :where(article, article section) > :is(h4, h5, h6) {
+      font-size: 20px;
+    }
+  }
+
+  @media (min-width: 50em) {
+    :where(article, article section) > h2 {
+      padding-top: var(--space-5x);
+    }
+  }
+</style>
+
+<script>
+  import { prepareSections } from "~/scripts/prepArticleContent"
+
+  // Runs on initial navigation
+  prepareSections()
+  // Runs on view transitions navigation
+  document.addEventListener("astro:after-swap", () => prepareSections())
+</script>

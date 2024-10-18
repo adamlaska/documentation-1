@@ -1,0 +1,45 @@
+---
+import "../styles/theme.css"
+import "../styles/index.css"
+import "../styles/migrated.css"
+import "../styles/prism-darcula.css"
+import "@chainlink/design-system/global-styles.css"
+
+export interface Props {
+  title: string
+}
+const { title } = Astro.props
+---
+
+<title>{title}</title>
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link href="/images/logo.png" rel="apple-touch-icon" />
+
+<link rel="sitemap" href="/sitemap-index.xml" />
+
+<!-- Scrollable a11y code helper -->
+<script src="/make-scrollable-code-focusable.js" is:inline></script>
+
+<!-- Google Tag Manager -->
+<script type="text/javascript">
+  ;(function (w, d, s, l, i) {
+    w[l] = w[l] || []
+    w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" })
+    var f = d.getElementsByTagName(s)[0],
+      j = d.createElement(s),
+      dl = l != "dataLayer" ? "&l=" + l : ""
+    j.async = true
+    j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl
+    f.parentNode.insertBefore(j, f)
+  })(window, document, "script", "dataLayer", "GTM-N6DQ47T")
+</script>
+<!-- End Google Tag Manager -->
+
+<!--Start Weglot Script-->
+<link rel="alternate" hreflang="en" href="https://docs.chain.link" />
+<script type="text/javascript" src="https://cdn.weglot.com/weglot.min.js"></script>
