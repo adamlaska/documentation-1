@@ -1,0 +1,174 @@
+---
+import FeedsCommonCallout from "../callouts/FeedsCommonCallout.astro"
+import { FeedList, DataFeedType } from "./FeedList"
+import { Aside } from "@components"
+export type Props = {
+  initialNetwork?: string
+  ecosystem: string
+  dataFeedType?: DataFeedType
+}
+import { getServerSideChainMetadata } from "~/features/data/api/backend"
+import { CHAINS, ALL_CHAINS } from "~/features/data/chains"
+import { CheckHeartbeat } from "./pause-notice/CheckHeartbeat"
+import { FeedDataItem, monitoredFeeds } from "~/features/data"
+
+const { initialNetwork, ecosystem, dataFeedType } = Astro.props
+
+const initialCache = await getServerSideChainMetadata([...CHAINS, ...ALL_CHAINS])
+const feedItems: FeedDataItem[] = monitoredFeeds.mainnet
+---
+
+{
+  dataFeedType === "por"
+    ? feedItems.map((feedItem: FeedDataItem) => {
+        const [feedAddress] = Object.keys(feedItem)
+        return (
+          <CheckHeartbeat
+            client:only="preact"
+            {feedAddress}
+            supportedChain="ETHEREUM_MAINNET"
+            feedName="TUSD Reserves"
+            currencyName={feedItem[feedAddress]}
+          />
+        )
+      })
+    : ""
+}
+
+{
+  ecosystem === "deprecating" ? (
+    <>
+      <p>
+        The smart contract ecosystem is constantly evolving. As a result, Data Feeds within the Chainlink ecosystem are
+        continuously evaluated for their usage and economic viability across all the blockchains and layer-2 networks
+        they are deployed on.
+      </p>
+      <p>
+        Data Feeds with low or no usage or feeds that do not have a viable path to economic sustainability may be
+        scheduled for deprecation. Doing so helps preserve blockchains as public goods by optimizing blockspace usage.
+        It also helps to reduce unnecessary costs incurred by Chainlink node operators. This process is part of a
+        broader ecosystem shift towards Chainlink Economics 2.0, designed to maximize the adoption of the Chainlink
+        protocol while optimizing for cost-efficiency and long-term economic sustainability. Over time, new Data Feeds
+        may be launched or relocated to alternative blockchains/layer-2s that better reflect current user demand.
+      </p>
+      <p>
+        For status updates regarding Data Feeds, users should join the official Chainlink Discord and subscribe to the{" "}
+        <a href="https://discord.gg/Dqy5N9UbsR">data-feeds-user-notifications channel</a>.
+      </p>
+      <p>
+        Users with additional questions are encouraged to reach out{" "}
+        <a href="https://chainlinkcommunity.typeform.com/s/dataFeedQs">here</a>.
+      </p>
+      <p>
+        A list of data feeds designated for deprecation along with their corresponding shutdown date can be found below.
+      </p>
+    </>
+  ) : (
+    <>
+      {dataFeedType === "streams" ? (
+        <>
+          <p>
+            To learn how to use Data Streams, see the{" "}
+            <a href="/data-streams/getting-started">Data Streams Getting Started</a> page.
+          </p>
+          <p>
+            For LINK token and Faucet details, see the{" "}
+            <a href="/resources/link-token-contracts?parent=dataFeeds">LINK Token Contracts</a> page.
+          </p>
+          <Aside type="note" title="Talk to an expert">
+            <p>
+              <a href="https://chainlinkcommunity.typeform.com/datastreams?#ref_id=docs">Contact us</a> to talk to an
+              expert about integrating Chainlink Data Streams with your applications.
+            </p>
+          </Aside>
+        </>
+      ) : dataFeedType === "por" ? (
+        <>
+          <p>
+            To learn how to use these feeds, see the{" "}
+            <a href="/data-feeds/proof-of-reserve/">Proof Of Reserve Feeds documentation.</a>
+          </p>
+          <p>
+            For LINK token and Faucet details, see the{" "}
+            <a href="/resources/link-token-contracts?parent=dataFeeds">LINK Token Contracts</a> page.
+          </p>
+          <Aside type="note" title="Talk to an expert">
+            <p>
+              <a href="https://chain.link/contact?ref_id=DataFeed">Contact us</a> to talk to an expert about integrating
+              Chainlink Data Feeds with your applications.
+            </p>
+          </Aside>
+          <FeedsCommonCallout callout="porWalletAddressManager" />
+          <FeedsCommonCallout callout="quality" />
+        </>
+      ) : dataFeedType === "rates" ? (
+        <>
+          <p>
+            To learn how to use these feeds, see the <a href="/data-feeds/using-data-feeds">Using Data Feeds</a> guide.
+          </p>
+          <p>
+            For LINK token and Faucet details, see the{" "}
+            <a href="/resources/link-token-contracts?parent=dataFeeds">LINK Token Contracts</a> page.
+          </p>
+        </>
+      ) : (
+        <>
+          <p>
+            To learn how to use these feeds, see the <a href="/data-feeds/using-data-feeds">Using Data Feeds</a> guide.
+          </p>
+          <p>
+            For LINK token and Faucet details, see the{" "}
+            <a href="/resources/link-token-contracts?parent=dataFeeds">LINK Token Contracts</a> page.
+          </p>
+          <Aside type="note" title="Talk to an expert">
+            <p>
+              <a href="https://chain.link/contact?ref_id=DataFeed">Contact us</a> to talk to an expert about integrating
+              Chainlink Data Feeds with your applications.
+            </p>
+          </Aside>
+
+          <FeedsCommonCallout callout="quality" />
+        </>
+      )}
+    </>
+  )
+}
+
+{
+  dataFeedType === "por" ? (
+    <>
+      <Aside title="Disclaimer" type="caution">
+        <p>
+          Proof of Reserve feeds can vary in their configurations. Please be careful with the configuration of the feeds
+          used by your smart contracts. You are solely responsible for reviewing the quality of the data (e.g., a Proof
+          of Reserve feed) that you integrate into your smart contracts and assume full responsibility for any damage,
+          injury, or any other loss caused by your use of the feeds used by your smart contracts.
+          <a href="/data-feeds/selecting-data-feeds#risk-mitigation">
+            Learn more about making responsible data quality decisions.
+          </a>
+        </p>
+      </Aside>
+    </>
+  ) : dataFeedType === "streams" ? (
+    <> </>
+  ) : (
+    <>
+      <Aside type="caution">
+        <p>
+          Please be careful with the feeds used by your smart contracts. The feeds listed in our official documentation
+          have been reviewed; feeds built for custom deployments by other community members might have additional risks.
+          Please do close diligence on your feeds before implementing them in your contracts.{" "}
+          <a href="/data-feeds/selecting-data-feeds"> Learn more about making responsible data quality decisions.</a>
+        </p>
+      </Aside>
+    </>
+  )
+}
+
+<FeedList
+  client:idle
+  initialNetwork={initialNetwork ?? "ethereum"}
+  dataFeedType={dataFeedType ?? "default"}
+  ecosystem={ecosystem ?? ""}
+  initialCache={initialCache}
+/>

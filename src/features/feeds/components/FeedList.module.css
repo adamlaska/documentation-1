@@ -1,0 +1,222 @@
+.detailHidden {
+  display: none;
+}
+
+.hoverText {
+  text-decoration: none;
+}
+
+div.shutDate {
+  font-size: 12px;
+  text-align: center;
+  line-height: 1.25em;
+}
+
+div.shutDate > hr {
+  margin: 2px;
+  border: 0;
+  height: 1px;
+  background: #dfe2e5;
+}
+
+.clChainnavProduct {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* position: sticky; */
+  /* top: 0; */
+  /* z-index: +1; */
+}
+
+.clChainnavProduct > div {
+  background-color: #ffffff;
+  max-width: 700px;
+  min-width: 345px;
+  margin: 16px 16px 16px 16px;
+  border-radius: 8px;
+  border: 1px solid #dee7fc;
+  text-align: center;
+  flex: 1;
+}
+
+.clChainnavProduct > div > div > div {
+  color: rgb(61, 69, 86);
+  font-size: 18px;
+  display: inline-flex;
+  width: 150px;
+  height: 32px;
+  margin: 6px;
+}
+
+.clChainnavProduct > div > div > div:hover {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.clChainnavProduct > div > div > div > span {
+  margin-left: 6px;
+  margin-top: 6px;
+}
+
+.clChainnavProduct > div > div > div > img {
+  max-width: 32px;
+  max-height: 32px;
+  min-width: 32px;
+  transition: all 0.2s;
+}
+
+.clChainnavProduct > div > div > div:hover > img {
+  cursor: pointer;
+  transform: scale(1.15);
+}
+
+.selectedNetwork {
+  font-weight: bold;
+  pointer-events: none;
+}
+
+.selectedNetwork > img {
+  transform: scale(1.15);
+}
+
+.networkSwitchButton {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2x);
+  gap: var(--space-2x);
+  text-decoration-color: transparent;
+}
+
+.networkSwitchButton[aria-selected="false"] {
+  border-color: transparent;
+  text-decoration-color: transparent;
+}
+
+.networkSwitchButton[aria-selected="true"] {
+  text-decoration-color: initial;
+}
+
+.networkSwitchButton[aria-selected="true"] > span {
+  font-weight: bold;
+}
+
+.networkSwitchButton:hover img {
+  scale: 1.1;
+}
+
+.networkSwitchButton img {
+  height: 32px;
+  transition: all 0.15s;
+}
+
+.tableFilters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-4x);
+}
+
+.filterDropdown_details {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  width: 200px;
+}
+
+.filterDropdown_search {
+  position: relative;
+  max-width: 200px;
+}
+
+.filterDropdown_searchInput {
+  height: 42px;
+  border: var(--border-width-primary) solid var(--color-border-primary);
+  background-image: url(https://smartcontract.imgix.net/icons/searchIcon_blue_noborder.svg?auto=compress%2Cformat);
+  background-repeat: no-repeat;
+  background-position: left var(--space-2x) top 50%;
+  padding-left: var(--space-8x);
+  background-size: 16px;
+}
+
+.detailsLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2x);
+}
+
+@media screen and (max-width: 450px) {
+  .filterDropdown_details,
+  .filterDropdown_search {
+    padding-left: 0px;
+    padding-top: 1px;
+  }
+
+  .tableFilters {
+    gap: var(--space-2x);
+  }
+
+  .tableFilters > * {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+.filterDropdown_details summary {
+  color: var(--gray-900);
+  width: 100%;
+  padding: var(--space-3x) var(--space-3x) var(--space-3x) var(--space-4x);
+  border: var(--border-width-primary) solid var(--color-border-primary);
+  border-radius: var(--border-radius-primary);
+  background-image: url(https://smartcontract.imgix.net/icons/Caret.svg?auto=compress%2Cformat);
+  background-repeat: no-repeat;
+  background-position: right var(--space-2x) top 50%;
+  list-style: none;
+}
+
+.filterDropdown_details nav {
+  position: absolute;
+  border-radius: var(--border-radius-primary);
+  background: var(--white);
+  z-index: 1;
+  margin-top: var(--space-2x);
+  min-width: 165px;
+  width: 100%;
+  box-shadow: var(--shadow-mid-secondary);
+  border: var(--border-width-primary) solid var(--color-border-primary);
+}
+.filterDropdown_details ul {
+  list-style: none;
+  max-height: 280px;
+  overflow-y: scroll;
+  padding: 0 var(--space-2x);
+}
+.filterDropdown_details li button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: var(--color-text-primary);
+  -webkit-font-feature-settings: "liga" off;
+  font-feature-settings: "liga" off;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  padding: var(--space-4x) var(--space-2x);
+  margin: 0;
+  width: 100%;
+}
+.filterDropdown_details li button input {
+  width: auto;
+  margin-right: var(--space-2x);
+}
+.filterDropdown_details li button:hover {
+  color: var(--color-text-link-hover);
+  fill: var(--color-text-link-hover);
+  background-color: var(--blue-100);
+  font-weight: 500;
+}
+.filterDropdown_filter {
+  padding: var(--space-3x) var(--space-4x) var(--space-5x) var(--space-4x);
+}

@@ -1,0 +1,160 @@
+---
+section: chainlinkFunctions
+date: Last Modified
+title: "Request Computation"
+metadata:
+  linkToWallet: true
+whatsnext:
+  {
+    "Try out the Chainlink Functions Tutorials": "/chainlink-functions/tutorials",
+    "Read the Architecture to understand how Chainlink Functions operates": "/chainlink-functions/resources/architecture",
+  }
+---
+
+import { Aside, CopyText } from "@components"
+import { Tabs } from "@components/Tabs"
+import ChainlinkFunctions from "@features/chainlink-functions/common/ChainlinkFunctions.astro"
+
+This tutorial shows you how to run computations on the Chainlink Functions Decentralized Oracle Network (DON). The example code computes the [geometric mean](https://www.mathsisfun.com/numbers/geometric-mean.html) of numbers in a list. After [OCR](/chainlink-functions/resources/concepts) completes offchain computation and aggregation, it returns the result to your smart contract.
+
+<ChainlinkFunctions section="prerequisites-guides" />
+
+## Tutorial
+
+This tutorial is configured to get the average (geometric mean) from a list of numbers `1,2,3,4,5,6,7,8,9,10`. Read the [Examine the code](#examine-the-code) section for a detailed description of the code example.
+
+You can locate the scripts used in this tutorial in the [_examples/1-simple-computation_ directory](https://github.com/smartcontractkit/smart-contract-examples/tree/main/functions-examples/examples/1-simple-computation).
+
+To run the example:
+
+1. Open the file `request.js`, which is located in the `1-simple-computation` folder.
+1. Replace the consumer contract address and the subscription ID with your own values.
+
+   ```javascript
+   const consumerAddress = "0x8dFf78B7EE3128D00E90611FBeD20A71397064D9" // REPLACE this with your Functions consumer address
+   const subscriptionId = 3 // REPLACE this with your subscription ID
+   ```
+
+1. Make a request:
+
+   ```shell
+   node examples/1-simple-computation/request.js
+   ```
+
+   The script runs your function in a sandbox environment before making an onchain transaction:
+
+   ```text
+   $ node examples/1-simple-computation/request.js
+
+   secp256k1 unavailable, reverting to browser version
+   Start simulation...
+   Simulation result {
+   capturedTerminalOutput: 'calculate geometric mean of 1,2,3,4,5,6,7,8,9,10\ngeometric mean is: 4.53\n',
+   responseBytesHexstring: '0x00000000000000000000000000000000000000000000000000000000000001c5'
+   }
+   ✅ Decoded response to uint256:  453n
+
+   Estimate request costs...
+   Fulfillment cost estimated to 1.004325887213695 LINK
+
+   Make request...
+
+   ✅ Functions request sent! Transaction hash 0x7df8240d23ef5c951ea73634b2346a459c8cd5b9a0bf76dbe0bb4d912e099b22. Waiting for a response...
+   See your request in the explorer https://sepolia.etherscan.io/tx/0x7df8240d23ef5c951ea73634b2346a459c8cd5b9a0bf76dbe0bb4d912e099b22
+
+   ✅ Request 0x91a72a36a94ddedfc9e7bcfe33aaa13dd5747c4e985d9baa8c0c34175ac6c715 successfully fulfilled. Cost is 0.240613623834519812 LINK.Complete reponse:  {
+   requestId: '0x91a72a36a94ddedfc9e7bcfe33aaa13dd5747c4e985d9baa8c0c34175ac6c715',
+   subscriptionId: 2303,
+   totalCostInJuels: 240613623834519812n,
+   responseBytesHexstring: '0x00000000000000000000000000000000000000000000000000000000000001c5',
+   errorString: '',
+   returnDataBytesHexstring: '0x',
+   fulfillmentCode: 0
+   }
+
+   ✅ Decoded response to uint256:  453n
+   ```
+
+   The output of the example gives you the following information:
+
+   - Your request is first run on a sandbox environment to ensure it is correctly configured.
+   - The fulfillment costs are estimated before making the request.
+   - Your request was successfully sent to Chainlink Functions. The transaction in this example is [0x7df8240d23ef5c951ea73634b2346a459c8cd5b9a0bf76dbe0bb4d912e099b22](https://sepolia.etherscan.io/tx/0x7df8240d23ef5c951ea73634b2346a459c8cd5b9a0bf76dbe0bb4d912e099b22) and the request ID is `0x91a72a36a94ddedfc9e7bcfe33aaa13dd5747c4e985d9baa8c0c34175ac6c715`.
+
+   - The DON successfully fulfilled your request. The total cost was: `0.240613623834519812 LINK`.
+   - The consumer contract received a response in `bytes` with a value of `0x00000000000000000000000000000000000000000000000000000000000001c5`. Decoding it offchain to `uint256` gives you a result: `453`.
+
+## Examine the code
+
+### FunctionsConsumerExample.sol
+
+<ChainlinkFunctions section="functions-consumer" />
+
+### JavaScript example
+
+#### source.js
+
+The Decentralized Oracle Network will run the [JavaScript code](https://github.com/smartcontractkit/smart-contract-examples/blob/main/functions-examples/examples/1-simple-computation/source.js). The code is self-explanatory and has comments to help you understand all the steps. **Note**: Functions requests with custom source code can use vanilla [Deno](https://deno.land/) but cannot use any require statements. Import statements and imported modules are supported only on testnets.
+
+The main steps are:
+
+- Read the numbers provided as arguments in the `args` setting. Because `args` is an array of `string`, call `parseInt` to convert from `string` to `number`. **Note**: `args` contains string values that are injected into the JavaScript source code when the Decentralized Oracle Network executes your function. You can access theses values from your JavaScript code using the name `args`.
+- Calculate the average (geometric mean): First, compute the product of the numbers. Then, calculate the nth root of the product where `n` is the length of `args`.
+- Return the result as a [buffer](https://nodejs.org/api/buffer.html#buffer) using the `Functions.encodeUint256` helper function. Because Solidity doesn't support decimals, multiply the result by `100` and round the result to the nearest integer. There are other helper functions that you could use depending on the response type:
+
+  - `Functions.encodeUint256`: Takes a positive JavaScript integer number and returns a Buffer of 32 bytes representing a uint256 type in Solidity.
+  - `Functions.encodeInt256`: Takes a JavaScript integer number and returns a Buffer of 32 bytes representing an int256 type in Solidity.
+  - `Functions.encodeString`: Takes a JavaScript string and returns a Buffer representing a string type in Solidity.
+
+  **Note**: You are not required to use these encoding functions as long as the JavaScript code returns a Buffer representing the bytes array returned onchain. Read this [article](https://www.freecodecamp.org/news/do-you-want-a-better-understanding-of-buffer-in-node-js-check-this-out-2e29de2968e8/) if you are new to Javascript Buffers and want to understand why they are important.
+
+#### request.js
+
+This explanation focuses on the [request.js](https://github.com/smartcontractkit/smart-contract-examples/blob/main/functions-examples/examples/1-simple-computation/request.js) script and shows how to use the [Chainlink Functions NPM package](https://github.com/smartcontractkit/functions-toolkit) in your own JavaScript/TypeScript project to send requests to a DON. The code is self-explanatory and has comments to help you understand all the steps.
+
+The script imports:
+
+- [path](https://nodejs.org/docs/latest/api/path.html) and [fs](https://nodejs.org/api/fs.html) : Used to read the [source file](https://github.com/smartcontractkit/smart-contract-examples/blob/main/functions-examples/examples/1-simple-computation/source.js).
+- [ethers](https://docs.ethers.org/v5/): Ethers.js library, enables the script to interact with the blockchain.
+- `@chainlink/functions-toolkit`: Chainlink Functions NPM package. All its utilities are documented in the [NPM README](https://github.com/smartcontractkit/functions-toolkit/blob/main/README.md).
+- `@chainlink/env-enc`: A tool for loading and storing encrypted environment variables. Read the [official documentation](https://www.npmjs.com/package/@chainlink/env-enc) to learn more.
+- `../abi/functionsClient.json`: The abi of the contract your script will interact with. **Note**: The script was tested with this [FunctionsConsumerExample contract](https://remix.ethereum.org/#url=https://docs.chain.link/samples/ChainlinkFunctions/FunctionsConsumerExample.sol).
+
+The script has two hardcoded values that you have to change using your own Functions consumer contract and subscription ID:
+
+```javascript
+const consumerAddress = "0x8dFf78B7EE3128D00E90611FBeD20A71397064D9" // REPLACE this with your Functions consumer address
+const subscriptionId = 3 // REPLACE this with your subscription ID
+```
+
+The primary function that the script executes is `makeRequestSepolia`. This function consists of five main parts:
+
+1. Definition of necessary identifiers:
+
+   - `routerAddress`: Chainlink Functions router address on the Sepolia testnet.
+   - `donId`: Identifier of the DON that will fulfill your requests on the Sepolia testnet.
+   - `explorerUrl`: Block explorer URL of the Sepolia testnet.
+   - `source`: The source code must be a string object. That's why we use `fs.readFileSync` to read `source.js` and then call `toString()` to get the content as a `string` object.
+   - `args`: During the execution of your function, These arguments are passed to the source code.
+   - `gasLimit`: Maximum gas that Chainlink Functions can use when transmitting the response to your contract.
+   - Initialization of ethers `signer` and `provider` objects. The signer is used to make transactions on the blockchain, and the provider reads data from the blockchain.
+
+1. Simulating your request in a local sandbox environment:
+
+   - Use `simulateScript` from the Chainlink Functions NPM package.
+   - Read the `response` of the simulation. If successful, use the Functions NPM package `decodeResult` function and `ReturnType` enum to decode the response to the expected returned type (`ReturnType.uint256` in this example).
+
+1. Estimating the costs:
+
+   - Initialize a `SubscriptionManager` from the Functions NPM package, then call the `estimateFunctionsRequestCost`.
+   - The response is returned in Juels (1 LINK = 10\*\*18 Juels). Use the `ethers.utils.formatEther` utility function to convert the output to LINK.
+
+1. Making a Chainlink Functions request:
+
+   - Initialize your functions consumer contract using the contract address, abi, and ethers signer.
+   - Call the `sendRequest` function of your consumer contract.
+
+1. Waiting for the response:
+
+   - Initialize a `ResponseListener` from the Functions NPM package and then call the `listenForResponseFromTransaction` function to wait for a response. By default, this function waits for five minutes.
+   - Upon reception of the response, use the Functions NPM package `decodeResult` function and `ReturnType` enum to decode the response to the expected returned type (`ReturnType.uint256` in this example).
