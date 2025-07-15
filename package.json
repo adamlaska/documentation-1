@@ -40,7 +40,7 @@
     "generate-graphql": "graphql-codegen --config ./codegen.ts"
   },
   "dependencies": {
-    "@11ty/eleventy-fetch": "^4.0.1",
+    "@11ty/eleventy-fetch": "^5.0.0",
     "@apollo/client": "^3.13.8",
     "@astro-community/astro-embed-youtube": "^0.5.6",
     "@astrojs/mdx": "^4.3.0",
