@@ -403,6 +403,33 @@
   },
   "data": [
     {
+      "category": "integration",
+      "date": "2026-01-18",
+      "description": "Newly supported tokens: BGB, PTjrUSDe, PTsrUSDe",
+      "relatedTokens": [
+        {
+          "assetName": "BitgetToken",
+          "baseAsset": "BGB",
+          "url": "https://docs.chain.link/ccip/directory/mainnet/token/BGB",
+          "iconUrl": "https://d2f70xi62kby8n.cloudfront.net/tokens/bgb.webp?auto=compress%2Cformat&q=60&w=40&h=40&fit=cover"
+        },
+        {
+          "assetName": "PT Strata Junior USDe 2APR2026",
+          "baseAsset": "PTjrUSDe",
+          "url": "https://docs.chain.link/ccip/directory/mainnet/token/PTjrUSDe",
+          "iconUrl": "https://d2f70xi62kby8n.cloudfront.net/tokens/ptjrusde.webp?auto=compress%2Cformat&q=60&w=40&h=40&fit=cover"
+        },
+        {
+          "assetName": "PT Strata Senior USDe 2APR2026",
+          "baseAsset": "PTsrUSDe",
+          "url": "https://docs.chain.link/ccip/directory/mainnet/token/PTsrUSDe",
+          "iconUrl": "https://d2f70xi62kby8n.cloudfront.net/tokens/ptsrusde.webp?auto=compress%2Cformat&q=60&w=40&h=40&fit=cover"
+        }
+      ],
+      "title": "Cross-chain token (CCT) standard: Added support for new tokens",
+      "topic": "CCIP"
+    },
+    {
       "category": "deprecation",
       "date": "2026-04-22",
       "description": "We have announced the deprecation of select Data Feeds, scheduled for shutdown on May 6th, 2026. Check [the list of Deprecating Data Feeds to learn more](https://docs.chain.link/data-feeds/deprecating-feeds).",
