@@ -185,7 +185,7 @@
     "solhint": "^6.2.4",
     "solhint-plugin-chainlink-solidity": "github:smartcontractkit/chainlink-solhint-rules#v1.3.0",
     "solhint-plugin-prettier": "^0.1.0",
-    "tailwindcss": "^3.4.18",
+    "tailwindcss": "^4.0.0",
     "ts-jest": "^29.4.12",
     "tsconfig-paths": "^4.2.0",
     "tsx": "^4.23.13",
